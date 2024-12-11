@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page with Pricing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .pricing {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .card {
+      background: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 2rem;
+      width: 300px;
+      text-align: center;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #4CAF50;
+    }
+
+    .card p {
+      margin: 1rem 0;
+      color: #666;
+    }
+
+    .card .price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .card button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .card button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <h1>Welcome to Our Product</h1>
+    <p>Choose a plan that works for you</p>
+  </header>
+
+  <div class="container">
+    <section class="pricing">
+      <!-- Solo Plan -->
+      <div class="card">
+        <h2>Solo</h2>
+        <p>Perfect for individuals</p>
+        <div class="price">$9.99/month</div>
+        <button id="soloPlanBtn">Choose Solo</button>
+      </div>
+
+      <!-- Freelance Plan -->
+      <div class="card">
+        <h2>Freelance</h2>
+        <p>Ideal for small teams</p>
+        <div class="price">$29.99/month</div>
+        <button id="freelancePlanBtn">Choose Freelance</button>
+      </div>
+
+      <!-- Team Plan -->
+      <div class="card">
+        <h2>Team</h2>
+        <p>Best for large teams</p>
+        <div class="price">$49.99/month</div>
+        <button id="teamPlanBtn">Choose Team</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Include Paddle SDK -->
+  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+  <script>
+    // Initialize Paddle
+    Paddle.Environment.set("sandbox"); // Change to "production" for live usage
+
+    // Paddle setup
+    Paddle.Setup({
+      vendor: 203466 // Replace with your Paddle Vendor ID
+    });
+
+    // Plan configurations
+    const plans = {
+      solo: 'pro_01jegab1f2fddaz3qc8xdm6gvb',
+      freelance: 'pro_02xxxxxxfreelance',
+      team: 'pro_03xxxxxxteam'
+    };
+
+    // Open checkout
+    function openCheckout(plan) {
+      console.log('Opening checkout for plan:', plan);
+
+      try {
+        const productId = plans[plan];
+        if (!productId) {
+          throw new Error(`Invalid plan: ${plan}`);
+        }
+
+        Paddle.Checkout.open({
+          product: productId,
+          successCallback: function (data) {
+            console.log('Checkout success:', data);
+            // Redirect to success page
+            window.location.href = `https://voit.webflow.io/download-page?product_id=${data.checkout.id}&user_email=${data.email}`;
+          },
+          closeCallback: function () {
+            console.log('Checkout closed');
+          }
+        });
+      } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+      }
+    }
+
+    // Add event listeners
+    document.getElementById('soloPlanBtn').addEventListener('click', () => openCheckout('solo'));
+    document.getElementById('freelancePlanBtn').addEventListener('click', () => openCheckout('freelance'));
+    document.getElementById('teamPlanBtn').addEventListener('click', () => openCheckout('team'));
+  </script>
+</body>
+
+</html>
