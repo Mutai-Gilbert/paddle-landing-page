@@ -1,165 +1,496 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Landing Page with Pricing</title>
+
+  <title>Landing Page with Login and Pricing</title>
+
   <style>
     body {
+
       font-family: Arial, sans-serif;
+
       margin: 0;
+
       padding: 0;
+
       background-color: #f5f5f5;
+
       color: #333;
+
     }
+
+
 
     .header {
+
       background-color: #4CAF50;
+
       color: white;
+
       text-align: center;
+
       padding: 1rem;
+
     }
+
+
 
     .container {
+
       max-width: 1200px;
+
       margin: 0 auto;
+
       padding: 2rem;
+
       text-align: center;
+
     }
+
+
+
+    .login-container,
+
+    .pricing-container {
+
+      display: none;
+
+    }
+
+
+
+    .visible {
+
+      display: block;
+
+    }
+
+
+
+    .login-container input {
+
+      width: 80%;
+
+      padding: 0.8rem;
+
+      margin-bottom: 1rem;
+
+      font-size: 1rem;
+
+    }
+
+
+
+    .login-container button {
+
+      padding: 0.8rem 1.5rem;
+
+      background-color: #4CAF50;
+
+      color: white;
+
+      border: none;
+
+      border-radius: 4px;
+
+      font-size: 1rem;
+
+      cursor: pointer;
+
+    }
+
+
+
+    .login-container button:hover {
+
+      background-color: #45a049;
+
+    }
+
+
 
     .pricing {
+
       display: flex;
+
       justify-content: center;
+
       flex-wrap: wrap;
+
       gap: 2rem;
+
     }
+
+
 
     .card {
+
       background: white;
+
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
       border-radius: 8px;
+
       padding: 2rem;
+
       width: 300px;
+
       text-align: center;
+
     }
+
+
 
     .card h2 {
+
       margin-top: 0;
+
       color: #4CAF50;
+
     }
+
+
 
     .card p {
+
       margin: 1rem 0;
+
       color: #666;
+
     }
+
+
 
     .card .price {
+
       font-size: 2rem;
+
       font-weight: bold;
+
       color: #333;
+
     }
+
+
 
     .card button {
+
       background-color: #4CAF50;
+
       color: white;
+
       border: none;
+
       border-radius: 4px;
+
       padding: 0.8rem 1.2rem;
+
       font-size: 1rem;
+
       cursor: pointer;
+
     }
+
+
 
     .card button:hover {
+
       background-color: #45a049;
+
     }
   </style>
+
 </head>
 
+
+
 <body>
+
   <header class="header">
+
     <h1>Welcome to Our Product</h1>
-    <p>Choose a plan that works for you</p>
+
+    <p>Login to access pricing and features</p>
+
   </header>
 
-  <div class="container">
-    <section class="pricing">
-      <!-- Solo Plan -->
-      <div class="card">
-        <h2>Solo</h2>
-        <p>Perfect for individuals</p>
-        <div class="price">$9.99/month</div>
-        <button id="soloPlanBtn">Choose Solo</button>
-      </div>
 
-      <!-- Freelance Plan -->
-      <div class="card">
-        <h2>Freelance</h2>
-        <p>Ideal for small teams</p>
-        <div class="price">$29.99/month</div>
-        <button id="freelancePlanBtn">Choose Freelance</button>
-      </div>
 
-      <!-- Team Plan -->
-      <div class="card">
-        <h2>Team</h2>
-        <p>Best for large teams</p>
-        <div class="price">$49.99/month</div>
-        <button id="teamPlanBtn">Choose Team</button>
-      </div>
-    </section>
+  <!-- Login Section -->
+
+  <div class="container login-container visible" id="loginContainer">
+
+    <h2>Login</h2>
+
+    <input type="email" id="emailInput" placeholder="Enter your email">
+
+    <button onclick="login()">Login</button>
+
   </div>
 
-  <!-- Include Paddle SDK -->
+
+
+  <!-- Pricing Section -->
+
+  <div class="container pricing-container" id="pricingContainer">
+
+    <h2>Choose Your Plan</h2>
+
+    <section class="pricing">
+
+      <!-- Solo Plan -->
+
+      <div class="card">
+
+        <h2>Solo</h2>
+
+        <p>Perfect for individuals</p>
+
+        <div class="price">$9.99/month</div>
+
+        <button id="soloPlanBtn">Choose Solo</button>
+
+      </div>
+
+
+
+      <!-- Freelance Plan -->
+
+      <div class="card">
+
+        <h2>Freelance</h2>
+
+        <p>Ideal for small teams</p>
+
+        <div class="price">$29.99/month</div>
+
+        <button id="freelancePlanBtn">Choose Freelance</button>
+
+      </div>
+
+
+
+      <!-- Team Plan -->
+
+      <div class="card">
+
+        <h2>Team</h2>
+
+        <p>Best for large teams</p>
+
+        <div class="price">$49.99/month</div>
+
+        <button id="teamPlanBtn">Choose Team</button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+
   <script>
+
     // Initialize Paddle
+
     Paddle.Environment.set("sandbox"); // Change to "production" for live usage
 
-    // Paddle setup
-    Paddle.Setup({
-      vendor: 203466 // Replace with your Paddle Vendor ID
-    });
+    Paddle.Setup({ vendor: 203466 }); // Replace with your Paddle Vendor ID
 
-    // Plan configurations
-    const plans = {
-      solo: 'pro_01jegab1f2fddaz3qc8xdm6gvb',
-      freelance: 'pro_02xxxxxxfreelance',
-      team: 'pro_03xxxxxxteam'
-    };
 
-    // Open checkout
-    function openCheckout(plan) {
-      console.log('Opening checkout for plan:', plan);
 
-      try {
-        const productId = plans[plan];
-        if (!productId) {
-          throw new Error(`Invalid plan: ${plan}`);
-        }
+    // Login logic
 
-        Paddle.Checkout.open({
-          product: productId,
-          successCallback: function (data) {
-            console.log('Checkout success:', data);
-            // Redirect to success page
-            window.location.href = `https://voit.webflow.io/download-page?product_id=${data.checkout.id}&user_email=${data.email}`;
-          },
-          closeCallback: function () {
-            console.log('Checkout closed');
-          }
-        });
-      } catch (error) {
-        console.error('Error:', error);
-        alert(error.message);
+    function login() {
+
+      const email = document.getElementById('emailInput').value;
+
+
+
+      if (!email) {
+
+        alert('Please enter a valid email.');
+
+        return;
+
       }
+
+
+
+      // Save email to localStorage and show pricing section
+
+      localStorage.setItem("sessionEmail", email);
+
+      document.getElementById('loginContainer').classList.remove('visible');
+
+      document.getElementById('pricingContainer').classList.add('visible');
+
+      alert(`Logged in as ${email}`);
+
     }
 
-    // Add event listeners
-    document.getElementById('soloPlanBtn').addEventListener('click', () => openCheckout('solo'));
-    document.getElementById('freelancePlanBtn').addEventListener('click', () => openCheckout('freelance'));
-    document.getElementById('teamPlanBtn').addEventListener('click', () => openCheckout('team'));
-  </script>
-</body>
 
+
+    // Checkout logic
+
+    function openCheckout(productID) {
+
+      const email = localStorage.getItem("sessionEmail");
+
+      if (!email) {
+
+        alert("Please login to continue.");
+
+        return;
+
+      }
+
+
+
+      Paddle.Checkout.open({
+
+        product: productID, // Replace with your Paddle Product ID
+
+        email: email,
+
+        successCallback: function (data) {
+
+          alert("Thank you for your purchase!");
+
+
+
+          // Prepare the payload (just the plan and email)
+
+          const payload = {
+
+            email: email,
+
+            plan: productID, // Use the productID as the plan identifier
+
+          };
+
+
+
+          // Call a function to handle the POST request
+
+          sendPostRequest(payload);
+
+        },
+
+        closeCallback: function () {
+
+          alert("Checkout closed.");
+
+        }
+
+      });
+
+    }
+
+
+
+    // Function to handle the POST request
+
+    function sendPostRequest(payload) {
+
+      fetch('https://7e1owlwjrc.execute-api.us-east-1.amazonaws.com/handle-paddle-webhook', {
+
+        method: 'POST',
+
+        headers: {
+
+          'Content-Type': 'application/json',
+
+        },
+
+        body: JSON.stringify(payload),
+
+      })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+          console.log('Payment data sent successfully:', data);
+
+
+
+          // Once payment is successful, show download button
+
+          if (data.asset_url) {
+
+            // You would receive the response like this:
+
+            // { "message": "Success", "email": "mutaigilbert85@gmail.com", "asset_url": "asset_url" }
+
+
+
+            // Show the download button with the URL
+
+            document.getElementById("downloadBtn").classList.remove('hidden');
+
+            window.assetUrl = data.asset_url; // Store the asset URL for later use
+
+          }
+
+        })
+
+        .catch((error) => {
+
+          console.error('Error sending payment data:', error);
+
+        });
+
+    }
+
+
+
+    // Download the asset
+
+    function downloadAsset() {
+
+      const assetUrl = window.assetUrl;
+
+      if (assetUrl) {
+
+        // Trigger a download of the asset
+
+        const link = document.createElement('a');
+
+        link.href = assetUrl;
+
+        link.download = "downloaded_asset.jpg"; // Set the desired filename
+
+        link.click();
+
+      } else {
+
+        alert("Asset URL is not available.");
+
+      }
+
+    }
+
+
+
+    // Attach event listeners to pricing buttons
+
+    document.getElementById("soloPlanBtn").addEventListener("click", () => openCheckout(12345)); // Replace with actual Product ID
+
+    document.getElementById("freelancePlanBtn").addEventListener("click", () => openCheckout(67890)); // Replace with actual Product ID
+
+    document.getElementById("teamPlanBtn").addEventListener("click", () => openCheckout(11223)); // Replace with actual Product ID
+
+  </script>
+
+</body>
 </html>
